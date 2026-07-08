@@ -20,7 +20,7 @@ export const TOKEN_KEY = "ttp_crm_token";
 
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-
+console.log("Base URL:", baseURL);
 const api = axios.create({ baseURL });
 
 // Attach the JWT to every request if we have one.
