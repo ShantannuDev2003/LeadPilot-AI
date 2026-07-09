@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AppLayout } from "./components/layout/AppLayout";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
-
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
@@ -15,7 +15,7 @@ import Settings from "./pages/Settings";
 /* Central route table. Auth routes are public; everything else is wrapped in
    the authenticated AppLayout behind <ProtectedRoute>. */
 export default function App() {
-   const [showWebViewWarning, setShowWebViewWarning] = useState(false);
+  const [showWebViewWarning, setShowWebViewWarning] = useState(false);
 
   // WebView detection — blocks Google Sign-In failures when opened inside
   // LinkedIn/Instagram/FB/Twitter in-app browsers
@@ -28,8 +28,11 @@ export default function App() {
       setShowWebViewWarning(true);
     }
   }, []);
+
   return (
-     {showWebViewWarning && (
+    <>
+      {/* WebView Warning Overlay */}
+      {showWebViewWarning && (
         <div className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center px-6">
           <div className="bg-white rounded-2xl p-8 text-center max-w-sm shadow-2xl">
             <p className="text-4xl mb-4">🌐</p>
@@ -58,30 +61,33 @@ export default function App() {
           </div>
         </div>
       )}
-    <Routes>
-      {/* Public */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
 
-      {/* Private */}
-      <Route
-        element={
-          <ProtectedRoute>
-            <AppLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/leads" element={<Leads />} />
-        <Route path="/contacts" element={<Contacts />} />
-        <Route path="/pipeline" element={<Pipeline />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/settings" element={<Settings />} />
-      </Route>
+      {/* Existing Routes — unchanged */}
+      <Routes>
+        {/* Public */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-      {/* Fallback */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Private */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/leads" element={<Leads />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/pipeline" element={<Pipeline />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
